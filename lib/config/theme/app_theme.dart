@@ -6,8 +6,10 @@ import 'package:musium/core/presentation/responsive_layout.dart';
 
 /// Returns ThemeData dynamically based on screen size (mobile/tablet).
 ThemeData buildAppTheme(BuildContext context) {
-  final textTheme =
-      ResponsiveLayout.isMobile(context) ? mobileTextTheme : tabletTextTheme;
+  final textTheme = ResponsiveLayout.isMobileProtrait(context) ||
+          ResponsiveLayout.isMobileLandscape(context)
+      ? mobileTextTheme
+      : tabletTextTheme;
 
   return ThemeData(
     brightness: Brightness.dark,

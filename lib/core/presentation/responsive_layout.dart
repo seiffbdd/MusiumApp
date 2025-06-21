@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:musium/core/constants/breakpoint.dart';
+import 'package:musium/core/constants/numbers.dart';
 
 /// A reusable widget that switches between mobile and tablet layouts
 /// based on the device's shortest side (width or height depending on orientation).
@@ -12,8 +12,13 @@ class ResponsiveLayout extends StatelessWidget {
     required this.mobile,
     required this.tablet,
   });
-  static bool isMobile(BuildContext context) =>
-      MediaQuery.sizeOf(context).shortestSide <= tabletBreakpoint;
+  static bool isMobileProtrait(BuildContext context) =>
+      MediaQuery.sizeOf(context).shortestSide <= tabletBreakpoint &&
+      MediaQuery.sizeOf(context).width < MediaQuery.sizeOf(context).height;
+
+  static bool isMobileLandscape(BuildContext context) =>
+      MediaQuery.sizeOf(context).shortestSide <= tabletBreakpoint &&
+      MediaQuery.sizeOf(context).width > MediaQuery.sizeOf(context).height;
 
   static bool isTablet(BuildContext context) =>
       MediaQuery.sizeOf(context).shortestSide > tabletBreakpoint;

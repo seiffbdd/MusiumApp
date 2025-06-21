@@ -11,8 +11,14 @@ abstract class AppColors {
 
   // Background
   static const Color backgroundDark = Color(0xFF1E1E1E);
+  static const Color black = Color(0xFF000000);
+  static const Color buttonBackgroundColor = Color(0XFF06A0B5);
 
   // Text
   static const Color textWhite = Color(0xFFFFFFFF);
   static const Color textMutedGrey = Color(0xFF8A9A9D);
+  static const Color textcyanBright = Color(0xFF76D7E6);
+  static const Color textCyanDark = Color(0xFF7CEEFF);
+
+  static const Color offWhite = Color(0XFFDBE7E8);
 }
