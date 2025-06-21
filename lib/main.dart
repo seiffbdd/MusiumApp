@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musium/config/routes/app_router.dart';
 import 'package:musium/config/theme/app_theme.dart';
 
 void main() {
@@ -10,8 +11,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: apptheme,
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      theme: buildAppTheme(context),
+      routerConfig: AppRouter.router,
     );
   }
 }
