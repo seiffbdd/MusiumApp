@@ -2,7 +2,7 @@
     <application
         android:label="musium"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/musium_icon_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"
