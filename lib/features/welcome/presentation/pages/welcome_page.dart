@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:musium/config/assets/app_images.dart';
+import 'package:musium/config/routes/app_router.dart';
 import 'package:musium/config/theme/app_colors.dart';
 import 'package:musium/core/constants/numbers.dart';
 import 'package:musium/core/presentation/components.dart';
 import 'package:musium/core/presentation/responsive_layout.dart';
 import 'package:musium/core/presentation/widgets/default_rounded_button.dart';
+import 'package:musium/core/storage/cache_helper.dart';
+import 'package:musium/core/utils/service_locator.dart';
 import 'package:musium/features/welcome/presentation/widgets/custom_divider.dart';
 import 'package:musium/features/welcome/presentation/widgets/custom_text_span.dart';
 
@@ -107,7 +111,12 @@ class WelcomePage extends StatelessWidget {
                   ),
                   DefaultRoundedButton(
                     text: 'Get Started',
-                    onPressed: () {},
+                    onPressed: () {
+                      context.goNamed(AppRouter.loginPageName);
+                      locator
+                          .get<CacheHelper>()
+                          .setOnboardingCompleted(isCompleted: true);
+                    },
                   )
                 ],
               ),
