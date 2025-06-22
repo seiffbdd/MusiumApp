@@ -10,9 +10,10 @@ abstract class AppColors {
   static const Color darkMutedTeal = Color(0xFF446266);
 
   // Background
-  static const Color backgroundDark = Color(0xFF1E1E1E);
+  static const Color backgroundDark = Color(0xFF121111);
   static const Color black = Color(0xFF000000);
   static const Color buttonBackgroundColor = Color(0XFF06A0B5);
+  static const Color fillColor = Color(0Xff1E1E1E);
 
   // Text
   static const Color textWhite = Color(0xFFFFFFFF);

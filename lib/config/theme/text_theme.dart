@@ -26,7 +26,7 @@ TextTheme get mobileTextTheme => TextTheme(
       ),
       titleLarge: TextStyle(
         fontSize: 16,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.normal,
         color: AppColors.textWhite,
       ),
       titleMedium: TextStyle(

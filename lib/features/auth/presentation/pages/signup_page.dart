@@ -3,27 +3,28 @@ import 'package:go_router/go_router.dart';
 import 'package:musium/config/assets/app_images.dart';
 import 'package:musium/config/routes/app_router.dart';
 import 'package:musium/core/presentation/widgets/default_rounded_button.dart';
-import 'package:musium/features/auth/presentation/widgets/build_checkbox.dart';
 import 'package:musium/features/auth/presentation/widgets/custom_text_form_field.dart';
 import 'package:musium/features/auth/presentation/widgets/divider_with_text.dart';
 import 'package:musium/features/auth/presentation/widgets/google_circle_button.dart';
 import 'package:musium/features/auth/presentation/widgets/text_and_text_button_row.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignupPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<SignupPage> {
   late TextEditingController _emailCont;
   late TextEditingController _passwordCont;
+  late TextEditingController _confirmPasswordCont;
   late GlobalKey<FormState> _formKey;
   @override
   void initState() {
     _emailCont = TextEditingController();
     _passwordCont = TextEditingController();
+    _confirmPasswordCont = TextEditingController();
     _formKey = GlobalKey();
     super.initState();
   }
@@ -32,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     _emailCont.dispose();
     _passwordCont.dispose();
-
+    _confirmPasswordCont.dispose();
     super.dispose();
   }
 
@@ -52,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 12.0),
                 Text(
-                  'Login to your account',
+                  'Create an account',
                   style: Theme.of(context).textTheme.displaySmall,
                 ),
                 const SizedBox(height: 24.0),
@@ -69,38 +70,41 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'Password',
                   isPassword: true,
                   prefixIcon: Icons.lock_outline,
+                  textInputAction: TextInputAction.next,
                 ),
-                const SizedBox(height: 8.0),
-                const BuildCheckbox(),
-                const SizedBox(height: 12.0),
+                const SizedBox(height: 24.0),
+                CustomTextFormField(
+                  controller: _confirmPasswordCont,
+                  hintText: 'Confirm Password',
+                  isPassword: true,
+                  prefixIcon: Icons.lock_outline,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This field can\'t be empty';
+                    } else if (_emailCont.text != _confirmPasswordCont.text) {
+                      return 'Password doesn\'t match';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 32.0),
                 DefaultRoundedButton(
-                  text: 'Log in',
+                  text: 'Sign Up',
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      //TODO
+                      // TODO
                     }
                   },
                 ),
-                const SizedBox(height: 8.0),
-                TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                      textStyle: TextStyle(color: Color(0XFF39C0D4))),
-                  child: Text(
-                    'Forgot the password?',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall!
-                        .copyWith(color: const Color(0XFF39C0D4)),
-                  ),
-                ),
+                const SizedBox(height: 16.0),
                 TextAndTextButtonRow(
-                  text: 'Don\'t have an account? ',
-                  textButton: 'Sign Up',
+                  text: 'Already have an account? ',
+                  textButton: 'Log in',
                   onPressed: () {
-                    context.goNamed(AppRouter.signupPageName);
+                    context.goNamed(AppRouter.loginPageName);
                   },
                 ),
+                const SizedBox(height: 8.0),
                 const DividerWithText(),
                 const SizedBox(height: 16.0),
                 const GoogleCircleButton()
