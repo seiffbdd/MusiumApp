@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:musium/config/assets/app_images.dart';
 import 'package:musium/config/routes/app_router.dart';
+import 'package:musium/core/presentation/components.dart';
 import 'package:musium/core/presentation/widgets/default_rounded_button.dart';
 import 'package:musium/features/auth/presentation/widgets/build_checkbox.dart';
 import 'package:musium/features/auth/presentation/widgets/custom_text_form_field.dart';
@@ -48,7 +49,13 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Image.asset(AppImages.musiumLogoPng),
+                  child: Image.asset(
+                    AppImages.musiumLogoPng,
+                    height: Components.h(
+                      componentHeight: 254,
+                      currentScreenHeight: MediaQuery.sizeOf(context).height,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 12.0),
                 Text(

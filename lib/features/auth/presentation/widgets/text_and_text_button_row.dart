@@ -15,23 +15,32 @@ class TextAndTextButtonRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(
-          text,
-          style: GoogleFonts.mulish(
-              textStyle: Theme.of(context).textTheme.titleLarge),
+        Expanded(
+          flex: 2,
+          child: Text(
+            textAlign: TextAlign.right,
+            text,
+            style: GoogleFonts.mulish(
+                textStyle: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    color: AppColors.textWhite, fontWeight: FontWeight.normal)),
+          ),
         ),
-        TextButton(
+        Expanded(
+          child: TextButton(
             onPressed: onPressed,
-            child: Text(
-              textButton,
-              style: GoogleFonts.mulish(
-                  textStyle: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: AppColors.textCyanDark)),
-            ))
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                textButton,
+                style: GoogleFonts.mulish(
+                    textStyle: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        color: AppColors.textCyanDark,
+                        fontWeight: FontWeight.normal)),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

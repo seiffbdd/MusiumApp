@@ -75,7 +75,7 @@ class _LoginPageState extends State<SignupPage> {
                 const SizedBox(height: 24.0),
                 CustomTextFormField(
                   controller: _confirmPasswordCont,
-                  hintText: 'Confirm Password',
+                  hintText: 'Confirm   Password',
                   isPassword: true,
                   prefixIcon: Icons.lock_outline,
                   validator: (value) {
