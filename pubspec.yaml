@@ -30,7 +30,10 @@ environment:
 dependencies:
   adaptive_screen_utils: ^2.4.0
   bloc: ^9.0.0
+  cloud_firestore: ^5.6.9
   cupertino_icons: ^1.0.8
+  firebase_auth: ^5.6.0
+  firebase_core: ^3.14.0
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
