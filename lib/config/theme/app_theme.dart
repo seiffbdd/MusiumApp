@@ -16,7 +16,11 @@ ThemeData buildAppTheme(BuildContext context) {
     textTheme: textTheme,
     fontFamily: 'GothicA1',
     textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-            textStyle: TextStyle(color: Color(0XFF39C0D4)))),
+      style: TextButton.styleFrom(
+        textStyle: TextStyle(
+          color: Color(0XFF39C0D4),
+        ),
+      ),
+    ),
   );
 }

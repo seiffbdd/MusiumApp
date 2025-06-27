@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:musium/config/theme/app_colors.dart';
 import 'package:musium/core/constants/numbers.dart';
 
 abstract class Components {
@@ -20,5 +22,27 @@ abstract class Components {
   }) {
     final double widthRatio = componentWidth / designScreenWidth;
     return currentScreenWidth * widthRatio;
+  }
+
+  static void showDefaultSnackBar({
+    required BuildContext context,
+    String? text,
+    Color textColor = AppColors.textWhite,
+    Color? backgroundColor,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: backgroundColor ?? AppColors.fillColor,
+        padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+        content: Text(
+          '$text',
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge!
+              .copyWith(color: textColor),
+        ),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 }
