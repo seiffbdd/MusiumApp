@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:musium/features/auth/domain/entities/user_entity.dart';
@@ -12,10 +14,12 @@ class AuthCubit extends Cubit<AuthState> {
   final GetUserDataUseCase _getUserDataUseCase;
 
   AuthCubit(this._listenToAuthStateUseCase, this._getUserDataUseCase)
-      : super(AuthInitial()) {
+      : super(AuthInitial());
+
+  void listenToUserChanges() {
     try {
       _listenToAuthStateUseCase(NoParams()).listen(
-        (auth) async {
+        (auth) {
           auth.fold(
             (failure) {
               emit(Unauthenticated(message: failure.message));
@@ -30,6 +34,7 @@ class AuthCubit extends Cubit<AuthState> {
       emit(UserDataFailed(errMessage: 'Error listening to auth state: $e'));
     }
   }
+
   Future<void> getUserData({required String uid}) async {
     try {
       final result = await _getUserDataUseCase(uid);

@@ -8,6 +8,10 @@ abstract class AuthRepo {
     required UserEntity userEntity,
     required String password,
   });
+  Future<Either<Failure, void>> login({
+    required String email,
+    required String password,
+  });
 
   Stream<Either<Failure, User>> get authStatus;
 

@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:musium/core/storage/cache_helper.dart';
 import 'package:musium/core/utils/service_locator.dart';
+import 'package:musium/features/auth/domain/use_cases/login_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/signup_use_case.dart';
+import 'package:musium/features/auth/presentation/cubits/login_cubit/login_cubit.dart';
 import 'package:musium/features/auth/presentation/cubits/signup_cubit/signup_cubit.dart';
 import 'package:musium/features/auth/presentation/pages/login_page.dart';
 import 'package:musium/features/auth/presentation/pages/signup_page.dart';
@@ -36,7 +38,10 @@ abstract class AppRouter {
       GoRoute(
         name: loginPageName,
         path: loginPagePath,
-        builder: (context, state) => LoginPage(),
+        builder: (context, state) => BlocProvider(
+          create: (context) => LoginCubit(locator.get<LoginUseCase>()),
+          child: LoginPage(),
+        ),
       ),
       GoRoute(
         name: signupPageName,

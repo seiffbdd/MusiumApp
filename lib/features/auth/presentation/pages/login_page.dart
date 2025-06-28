@@ -4,9 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:musium/config/assets/app_images.dart';
 import 'package:musium/config/routes/app_router.dart';
 import 'package:musium/core/presentation/components.dart';
-import 'package:musium/core/presentation/cubits/auth_cubit/auth_cubit.dart';
 import 'package:musium/core/presentation/widgets/default_rounded_button.dart';
+import 'package:musium/features/auth/presentation/cubits/login_cubit/login_cubit.dart';
 import 'package:musium/features/auth/presentation/widgets/build_checkbox.dart';
+import 'package:musium/features/auth/presentation/widgets/custom_circle_indicator.dart';
 import 'package:musium/features/auth/presentation/widgets/custom_text_form_field.dart';
 import 'package:musium/features/auth/presentation/widgets/divider_with_text.dart';
 import 'package:musium/features/auth/presentation/widgets/google_circle_button.dart';
@@ -41,92 +42,110 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthCubit, AuthState>(
+    return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
-        if (state is UserDataFailed) {
+        if (state is LoginFailed) {
           Components.showDefaultSnackBar(
             context: context,
-            text:
-                'Opps! an something went wrong, please try again later. and if the problem persists, please contact support.',
+            text: state.errMessage,
           );
+        }
+        if (state is LoginSuccess) {
+          context.goNamed(AppRouter.homePageName);
         }
       },
       child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
-          child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: Image.asset(
-                      AppImages.musiumLogoPng,
-                      height: Components.h(
-                        componentHeight: 254,
-                        currentScreenHeight: MediaQuery.sizeOf(context).height,
+        body: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 50),
+                        child: Image.asset(
+                          AppImages.musiumLogoPng,
+                          height: Components.h(
+                            componentHeight: 254,
+                            currentScreenHeight:
+                                MediaQuery.sizeOf(context).height,
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 12.0),
+                      Text(
+                        'Login to your account',
+                        style: Theme.of(context).textTheme.displaySmall,
+                      ),
+                      const SizedBox(height: 24.0),
+                      CustomTextFormField(
+                        controller: _emailCont,
+                        hintText: 'Email',
+                        prefixIcon: Icons.email_outlined,
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      const SizedBox(height: 24.0),
+                      CustomTextFormField(
+                        controller: _passwordCont,
+                        hintText: 'Password',
+                        isPassword: true,
+                        prefixIcon: Icons.lock_outline,
+                      ),
+                      const SizedBox(height: 8.0),
+                      const BuildCheckbox(),
+                      const SizedBox(height: 12.0),
+                      DefaultRoundedButton(
+                        text: 'Log in',
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await context.read<LoginCubit>().login(
+                                  email: _emailCont.text,
+                                  password: _passwordCont.text,
+                                );
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 8.0),
+                      TextButton(
+                        onPressed: () {},
+                        style: TextButton.styleFrom(
+                            textStyle: TextStyle(color: Color(0XFF39C0D4))),
+                        child: Text(
+                          'Forgot the password?',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(color: const Color(0XFF39C0D4)),
+                        ),
+                      ),
+                      TextAndTextButtonRow(
+                        text: 'Don\'t have an account? ',
+                        textButton: 'Sign Up',
+                        onPressed: () {
+                          context.goNamed(AppRouter.signupPageName);
+                        },
+                      ),
+                      const DividerWithText(),
+                      const SizedBox(height: 16.0),
+                      const GoogleCircleButton()
+                    ],
                   ),
-                  const SizedBox(height: 12.0),
-                  Text(
-                    'Login to your account',
-                    style: Theme.of(context).textTheme.displaySmall,
-                  ),
-                  const SizedBox(height: 24.0),
-                  CustomTextFormField(
-                    controller: _emailCont,
-                    hintText: 'Email',
-                    prefixIcon: Icons.email_outlined,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  const SizedBox(height: 24.0),
-                  CustomTextFormField(
-                    controller: _passwordCont,
-                    hintText: 'Password',
-                    isPassword: true,
-                    prefixIcon: Icons.lock_outline,
-                  ),
-                  const SizedBox(height: 8.0),
-                  const BuildCheckbox(),
-                  const SizedBox(height: 12.0),
-                  DefaultRoundedButton(
-                    text: 'Log in',
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        //TODO
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 8.0),
-                  TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                        textStyle: TextStyle(color: Color(0XFF39C0D4))),
-                    child: Text(
-                      'Forgot the password?',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall!
-                          .copyWith(color: const Color(0XFF39C0D4)),
-                    ),
-                  ),
-                  TextAndTextButtonRow(
-                    text: 'Don\'t have an account? ',
-                    textButton: 'Sign Up',
-                    onPressed: () {
-                      context.goNamed(AppRouter.signupPageName);
-                    },
-                  ),
-                  const DividerWithText(),
-                  const SizedBox(height: 16.0),
-                  const GoogleCircleButton()
-                ],
+                ),
               ),
             ),
-          ),
+            BlocBuilder<LoginCubit, LoginState>(
+              builder: (context, state) {
+                if (state is LoginLoading) {
+                  return const CustomCircleIndicator();
+                }
+                return const SizedBox.shrink();
+              },
+            )
+          ],
         ),
       ),
     );

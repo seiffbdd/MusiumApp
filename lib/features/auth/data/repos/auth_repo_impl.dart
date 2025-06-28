@@ -46,6 +46,19 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
+  Future<Either<Failure, void>> login(
+      {required String email, required String password}) async {
+    final result = await _firebaseAuthService.login(
+      email: email,
+      password: password,
+    );
+    return result.fold(
+      (failure) => left(failure),
+      (_) => right(null), // Login successful, no data to return
+    );
+  }
+
+  @override
   Stream<Either<Failure, User>> get authStatus async* {
     yield* _firebaseAuthService.authStatus;
   }

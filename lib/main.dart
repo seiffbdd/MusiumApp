@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musium/config/app_bloc_observer.dart';
 import 'package:musium/config/routes/app_router.dart';
 import 'package:musium/config/theme/app_theme.dart';
 import 'package:musium/core/presentation/cubits/auth_cubit/auth_cubit.dart';
@@ -13,6 +14,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await setup();
+  Bloc.observer = AppBlocObserver();
   runApp(const Musium());
 }
 
@@ -25,7 +27,7 @@ class Musium extends StatelessWidget {
       create: (context) => AuthCubit(
         locator.get<ListenToAuthStateUseCase>(),
         locator.get<GetUserDataUseCase>(),
-      ),
+      )..listenToUserChanges(),
       child: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is Authenticated) {

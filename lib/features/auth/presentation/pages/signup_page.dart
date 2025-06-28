@@ -6,6 +6,7 @@ import 'package:musium/config/routes/app_router.dart';
 import 'package:musium/core/presentation/components.dart';
 import 'package:musium/core/presentation/widgets/default_rounded_button.dart';
 import 'package:musium/features/auth/presentation/cubits/signup_cubit/signup_cubit.dart';
+import 'package:musium/features/auth/presentation/widgets/custom_circle_indicator.dart';
 import 'package:musium/features/auth/presentation/widgets/custom_text_form_field.dart';
 import 'package:musium/features/auth/presentation/widgets/divider_with_text.dart';
 import 'package:musium/features/auth/presentation/widgets/google_circle_button.dart';
@@ -49,7 +50,12 @@ class _LoginPageState extends State<SignupPage> {
       listener: (context, state) {
         if (state is SignupFailed) {
           Components.showDefaultSnackBar(
-              context: context, text: state.errMessage);
+            context: context,
+            text: state.errMessage,
+          );
+        }
+        if (state is SignupSuccess) {
+          context.goNamed(AppRouter.homePageName);
         }
       },
       child: Scaffold(
@@ -142,12 +148,7 @@ class _LoginPageState extends State<SignupPage> {
             BlocBuilder<SignupCubit, SignupState>(
               builder: (context, state) {
                 if (state is SignupLoading) {
-                  return ColoredBox(
-                    color: Colors.black54,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
+                  return const CustomCircleIndicator();
                 }
                 return const SizedBox.shrink();
               },

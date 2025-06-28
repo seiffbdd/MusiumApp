@@ -15,23 +15,27 @@ class SignupCubit extends Cubit<SignupState> {
       required String email,
       required String password}) async {
     emit(SignupLoading());
-    final user = UserEntity(
-      uid: '', // Firebase will generate this later
-      name: name,
-      email: email,
-    );
+    try {
+      final user = UserEntity(
+        uid: '', // Firebase will generate this later
+        name: name,
+        email: email,
+      );
 
-    final result = await _signupUseCase(
-      SignupParams(userEntity: user, password: password),
-    );
+      final result = await _signupUseCase(
+        SignupParams(userEntity: user, password: password),
+      );
 
-    result.fold(
-      (failure) {
-        emit(SignupFailed(errMessage: failure.message));
-      },
-      (userEntity) {
-        emit(SignupSuccess());
-      },
-    );
+      result.fold(
+        (failure) {
+          emit(SignupFailed(errMessage: failure.message));
+        },
+        (userEntity) {
+          emit(SignupSuccess());
+        },
+      );
+    } catch (e) {
+      emit(SignupFailed(errMessage: e.toString()));
+    }
   }
 }

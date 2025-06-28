@@ -1,10 +1,14 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:musium/core/errors/failure.dart';
 
 abstract class FirebaseAuthService {
   Future<Either<Failure, UserCredential>> signup({
+    required String email,
+    required String password,
+  });
+
+  Future<Either<Failure, void>> login({
     required String email,
     required String password,
   });
@@ -27,10 +31,25 @@ class FirebaseAuthServiceImpl extends FirebaseAuthService {
       return right(userCredentil);
     } on FirebaseAuthException catch (e) {
       final errMessage = _mapFirebaseAuthError(e.code);
-      debugPrint('FirebaseAuthException => ${e.code}: $errMessage');
       return left(Failure(message: errMessage, code: e.code));
     } catch (e) {
-      debugPrint('Unknown error => ${e.toString()}');
+      return left(Failure(message: ' Unexpected error: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> login(
+      {required String email, required String password}) async {
+    try {
+      await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return right(null);
+    } on FirebaseAuthException catch (e) {
+      final errMessage = _mapFirebaseAuthError(e.code);
+      return left(Failure(message: errMessage, code: e.code));
+    } catch (e) {
       return left(Failure(message: ' Unexpected error: ${e.toString()}'));
     }
   }
@@ -52,7 +71,6 @@ class FirebaseAuthServiceImpl extends FirebaseAuthService {
     } catch (e) {
       yield left(
           Failure(message: 'Error getting auth status: ${e.toString()}'));
-      debugPrint('Error getting auth status from service: $e');
     }
   }
 
@@ -76,6 +94,8 @@ class FirebaseAuthServiceImpl extends FirebaseAuthService {
         return 'Too many requests. Try again later.';
       case 'network-request-failed':
         return 'Network error. Please check your internet connection.';
+      case 'invalid-credential':
+        return 'invalid email or password';
       default:
         return 'An unknown error occurred. Please try again.';
     }

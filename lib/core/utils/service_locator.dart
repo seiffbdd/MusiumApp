@@ -8,6 +8,7 @@ import 'package:musium/features/auth/data/repos/auth_repo_impl.dart';
 import 'package:musium/features/auth/domain/repos/auth_repo.dart';
 import 'package:musium/features/auth/domain/use_cases/get_user_data_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/listen_to_auth_state_use_case.dart';
+import 'package:musium/features/auth/domain/use_cases/login_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/signup_use_case.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -49,6 +50,9 @@ Future<void> setup() async {
 
   locator.registerLazySingleton<SignupUseCase>(
     () => SignupUseCase(locator.get<AuthRepo>()),
+  );
+  locator.registerLazySingleton<LoginUseCase>(
+    () => LoginUseCase(locator.get<AuthRepo>()),
   );
 
   locator.registerSingleton<ListenToAuthStateUseCase>(
