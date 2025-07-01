@@ -5,4 +5,5 @@ abstract class AppImages {
   static const musiumSvg = 'assets/images/musium.svg';
   static const innerShadowPng = 'assets/images/inner_shadow.png';
   static const imgGirlPng = 'assets/images/img_girl.png';
+  static const blackGradientPng = 'assets/images/black_gradient.png';
 }

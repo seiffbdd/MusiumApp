@@ -9,6 +9,9 @@ import 'package:musium/features/auth/presentation/cubits/signup_cubit/signup_cub
 import 'package:musium/features/auth/presentation/pages/login_page.dart';
 import 'package:musium/features/auth/presentation/pages/signup_page.dart';
 import 'package:musium/features/home/presentation/pages/home_page.dart';
+import 'package:musium/features/settings/domain/use_cases/sign_out_use_case.dart';
+import 'package:musium/features/settings/presentation/cubits/sign_out_cubit/sign_out_cubit.dart';
+import 'package:musium/features/settings/presentation/pages/settings_page.dart';
 import 'package:musium/features/welcome/presentation/pages/welcome_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,6 +28,9 @@ abstract class AppRouter {
 
   static const homePageName = 'homePage';
   static const homePagePath = '/homePage';
+
+  static const settingsPageName = 'settingsPage';
+  static const settingsPagePath = '/settingsPage';
 
   /// The main router configuration using `go_router`.
   static final router = GoRouter(
@@ -55,6 +61,14 @@ abstract class AppRouter {
         name: homePageName,
         path: homePagePath,
         builder: (context, state) => HomePage(),
+      ),
+      GoRoute(
+        name: settingsPageName,
+        path: settingsPagePath,
+        builder: (context, state) => BlocProvider(
+          create: (context) => SignOutCubit(locator.get<SignOutUseCase>()),
+          child: SettingsPage(),
+        ),
       ),
     ],
   );
