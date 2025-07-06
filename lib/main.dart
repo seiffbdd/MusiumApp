@@ -43,7 +43,7 @@ class Musium extends StatelessWidget {
           }
         },
         child: ScreenUtilInit(
-          designSize: const Size(433, 922), // iPhone 12 Pro dimensions
+          designSize: const Size(433, 922),
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (context, child) {

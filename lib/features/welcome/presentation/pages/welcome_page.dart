@@ -8,7 +8,7 @@ import 'package:musium/core/presentation/components.dart';
 import 'package:musium/core/presentation/responsive_layout.dart';
 import 'package:musium/core/presentation/widgets/default_rounded_button.dart';
 import 'package:musium/core/storage/cache_helper.dart';
-import 'package:musium/core/utils/service_locator.dart';
+import 'package:musium/core/dependency_injection/service_locator.dart';
 import 'package:musium/features/welcome/presentation/widgets/custom_divider.dart';
 import 'package:musium/features/welcome/presentation/widgets/custom_text_span.dart';
 

@@ -11,7 +11,7 @@ class GetUserDataUseCase
   const GetUserDataUseCase(this._authRepo);
 
   @override
-  Future<Either<Failure, UserEntity>> call(String params) {
-    return _authRepo.getUserData(uid: params);
+  Future<Either<Failure, UserEntity>> call(String params) async {
+    return await _authRepo.getUserData(uid: params);
   }
 }

@@ -77,6 +77,17 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
+  Future<Either<Failure, void>> sendPasswordResetEmail(
+      {required String email}) async {
+    final result =
+        await _firebaseAuthService.sendPasswordResetEmail(email: email);
+    return result.fold(
+      (failure) => left(failure),
+      (_) => right(null), // Email sent successfully, no data to return
+    );
+  }
+
+  @override
   Stream<Either<Failure, User>> get authStatus =>
       _firebaseAuthService.authStatus;
 
@@ -86,6 +97,15 @@ class AuthRepoImpl implements AuthRepo {
     return result.fold(
       (failure) => left(failure),
       (userModel) => right(userModel),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> isEmailExists({required String email}) async {
+    final result = await _userRemoteDataSource.isEmailExists(email: email);
+    return result.fold(
+      (failure) => left(failure),
+      (isExists) => right(isExists),
     );
   }
 }

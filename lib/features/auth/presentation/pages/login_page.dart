@@ -105,7 +105,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 8.0),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          context.pushNamed(AppRouter.forgotPasswordPageName);
+                        },
                         style: TextButton.styleFrom(
                             textStyle: TextStyle(color: Color(0XFF39C0D4))),
                         child: Text(

@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:musium/core/utils/service_locator.dart';
+import 'package:musium/core/dependency_injection/service_locator.dart';
 import 'package:musium/features/auth/domain/use_cases/no_params.dart';
 import 'package:musium/features/auth/domain/use_cases/send_email_verification_use_case.dart';
 
@@ -25,16 +25,17 @@ class EmailVerificationCubit extends Cubit<EmailVerificationState> {
   Timer? _timer;
 
   Future<void> sendEmailVerification() async {
-    final response = await _sendEmailVerificationUseCase(NoParams.instance);
+    final response =
+        await _sendEmailVerificationUseCase.call(NoParams.instance);
     try {
       response.fold(
         (failure) => emit(
-          SendingEmailFailure(errMessage: failure.message),
+          SendingEmailFailed(errMessage: failure.message),
         ),
         (_) => emit(SendingEmailSuccess()),
       );
     } catch (e) {
-      emit(SendingEmailFailure(errMessage: e.toString()));
+      emit(SendingEmailFailed(errMessage: e.toString()));
     }
   }
 

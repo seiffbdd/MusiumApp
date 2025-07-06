@@ -17,6 +17,8 @@ abstract class FirebaseAuthService {
 
   Future<Either<Failure, void>> signOut();
 
+  Future<Either<Failure, void>> sendPasswordResetEmail({required String email});
+
   Stream<Either<Failure, User>> get authStatus;
 }
 
@@ -37,7 +39,7 @@ class FirebaseAuthServiceImpl extends FirebaseAuthService {
       final errMessage = _mapFirebaseAuthError(e.code);
       return left(Failure(message: errMessage, code: e.code));
     } catch (e) {
-      return left(Failure(message: ' Unexpected error: ${e.toString()}'));
+      return left(Failure(message: 'Unexpected error: ${e.toString()}'));
     }
   }
 
@@ -54,7 +56,7 @@ class FirebaseAuthServiceImpl extends FirebaseAuthService {
       final errMessage = _mapFirebaseAuthError(e.code);
       return left(Failure(message: errMessage, code: e.code));
     } catch (e) {
-      return left(Failure(message: ' Unexpected error: ${e.toString()}'));
+      return left(Failure(message: e.toString()));
     }
   }
 
@@ -78,10 +80,24 @@ class FirebaseAuthServiceImpl extends FirebaseAuthService {
       await _firebaseAuth.signOut();
       return right(null);
     } on FirebaseAuthException catch (e) {
-      return left(Failure(
-          message: 'FirebaseAuthException: ${e.message}', code: e.code));
+      return left(Failure(message: '${e.message}', code: e.code));
     } catch (e) {
-      return left(Failure(message: 'Error signing out: ${e.toString()}'));
+      return left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> sendPasswordResetEmail(
+      {required String email}) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      return right(null);
+    } on FirebaseAuthException catch (e) {
+      return left(Failure(message: '${e.message}', code: e.code));
+    } catch (e) {
+      return left(
+        Failure(message: e.toString()),
+      );
     }
   }
 
@@ -101,11 +117,11 @@ class FirebaseAuthServiceImpl extends FirebaseAuthService {
         return left(Failure(message: 'No user is currently signed in.'));
       } on FirebaseAuthException catch (e) {
         return left(Failure(
-          message: 'Firebase Auth Error: ${e.message ?? 'Unknown error'}',
+          message: '${e.message}',
           code: e.code,
         ));
       } catch (e) {
-        return left(Failure(message: 'Unexpected error: $e'));
+        return left(Failure(message: e.toString()));
       }
     });
   }

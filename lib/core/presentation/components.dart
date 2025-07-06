@@ -41,7 +41,7 @@ abstract class Components {
               .titleLarge!
               .copyWith(color: textColor),
         ),
-        duration: Duration(seconds: 2),
+        duration: Duration(seconds: 3),
       ),
     );
   }

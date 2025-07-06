@@ -11,8 +11,8 @@ class SignupUseCase
   const SignupUseCase(this._authRepo);
 
   @override
-  Future<Either<Failure, UserEntity>> call(SignupParams params) {
-    return _authRepo.signup(
+  Future<Either<Failure, UserEntity>> call(SignupParams params) async {
+    return await _authRepo.signup(
       userEntity: params.userEntity,
       password: params.password,
     );

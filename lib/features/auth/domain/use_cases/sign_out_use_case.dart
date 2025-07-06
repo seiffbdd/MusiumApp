@@ -9,7 +9,7 @@ class SignOutUseCase implements UseCase<Either<Failure, void>, NoParams> {
 
   SignOutUseCase(this._authRepo);
   @override
-  Future<Either<Failure, void>> call(NoParams params) {
-    return _authRepo.signOut();
+  Future<Either<Failure, void>> call(NoParams params) async {
+    return await _authRepo.signOut();
   }
 }

@@ -8,19 +8,25 @@ abstract class UserRemoteDataSource {
   Future<Either<Failure, void>> saveUserData({required UserModel userModel});
 
   Future<Either<Failure, UserModel>> getUserData({required String uid});
+
+  Future<Either<Failure, bool>> isEmailExists({required String email});
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
-  static const String usersCollectionKey = 'users';
+  static const String _usersCollectionKey = 'users';
+  late CollectionReference<Map<String, dynamic>> _usersCollectionReference;
+
   final FirebaseFirestore _firestore;
 
-  UserRemoteDataSourceImpl(this._firestore);
+  UserRemoteDataSourceImpl(this._firestore) {
+    _usersCollectionReference = _firestore.collection(_usersCollectionKey);
+  }
+
   @override
   Future<Either<Failure, void>> saveUserData(
       {required UserModel userModel}) async {
     try {
-      await _firestore
-          .collection(usersCollectionKey)
+      await _usersCollectionReference
           .doc(userModel.uid)
           .set(userModel.toJson());
       return right(null);
@@ -41,10 +47,8 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<Either<Failure, UserModel>> getUserData({required String uid}) async {
     try {
-      final doc = await _firestore
-          .collection(usersCollectionKey)
-          .where('uid', isEqualTo: uid)
-          .get();
+      final doc =
+          await _usersCollectionReference.where('uid', isEqualTo: uid).get();
       if (doc.docs.isNotEmpty) {
         return right(UserModel.fromJson(doc.docs.first.data()));
       } else {
@@ -57,13 +61,38 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       debugPrint('🔥 Firestore error: ${e.code} - ${e.message}');
       return left(
         Failure(
-          message: 'Failed to get user data: ${e.message ?? 'Unknown error'}',
+          message: '${e.message}',
           code: e.code,
         ),
       );
     } catch (e) {
       debugPrint('❌ Unexpected error getting user data: $e');
-      return left(Failure(message: 'Unexpected error: $e'));
+      return left(Failure(message: '$e'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> isEmailExists({required String email}) async {
+    try {
+      final doc = await _usersCollectionReference
+          .where('email', isEqualTo: email)
+          .get();
+      if (doc.docs.isNotEmpty) {
+        return right(true);
+      } else {
+        return right(false);
+      }
+    } on FirebaseException catch (e) {
+      debugPrint('🔥 Firestore error: ${e.code} - ${e.message}');
+      return left(
+        Failure(
+          message: '${e.message}',
+          code: e.code,
+        ),
+      );
+    } catch (e) {
+      debugPrint('❌ Unexpected error getting user data: $e');
+      return left(Failure(message: '$e'));
     }
   }
 }

@@ -11,10 +11,10 @@ final class EmailVerificationInitial extends EmailVerificationState {}
 
 final class SendingEmailSuccess extends EmailVerificationState {}
 
-final class SendingEmailFailure extends EmailVerificationState {
+final class SendingEmailFailed extends EmailVerificationState {
   final String errMessage;
 
-  const SendingEmailFailure({required this.errMessage});
+  const SendingEmailFailed({required this.errMessage});
 
   @override
   List<Object> get props => [errMessage];

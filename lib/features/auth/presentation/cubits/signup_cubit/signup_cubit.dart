@@ -22,7 +22,7 @@ class SignupCubit extends Cubit<SignupState> {
         email: email,
       );
 
-      final result = await _signupUseCase(
+      final result = await _signupUseCase.call(
         SignupParams(userEntity: user, password: password),
       );
 

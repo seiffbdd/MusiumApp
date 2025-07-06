@@ -5,11 +5,11 @@ import 'package:musium/config/routes/app_router.dart';
 import 'package:musium/config/theme/app_colors.dart';
 import 'package:musium/core/presentation/components.dart';
 import 'package:musium/core/presentation/widgets/default_rounded_button.dart';
-import 'package:musium/core/utils/service_locator.dart';
+import 'package:musium/core/dependency_injection/service_locator.dart';
 import 'package:musium/features/auth/domain/use_cases/no_params.dart';
 import 'package:musium/features/auth/presentation/cubits/email_verification_cubit/email_verification_cubit.dart';
 import 'package:musium/features/auth/presentation/cubits/timer_cubit/timer_cubit.dart';
-import 'package:musium/features/settings/domain/use_cases/sign_out_use_case.dart';
+import 'package:musium/features/auth/domain/use_cases/sign_out_use_case.dart';
 
 class VerifyEmailPage extends StatefulWidget {
   const VerifyEmailPage({super.key});
@@ -30,7 +30,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
     final screenHeight = MediaQuery.sizeOf(context).height;
     return BlocListener<EmailVerificationCubit, EmailVerificationState>(
       listener: (context, state) {
-        if (state is SendingEmailFailure) {
+        if (state is SendingEmailFailed) {
           Components.showDefaultSnackBar(
             context: context,
             text: state.errMessage,

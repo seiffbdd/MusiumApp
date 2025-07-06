@@ -3,18 +3,22 @@ import 'package:go_router/go_router.dart';
 import 'package:musium/core/storage/cache_helper.dart';
 import 'package:musium/core/dependency_injection/service_locator.dart';
 import 'package:musium/features/auth/domain/use_cases/count_down_use_case.dart';
+import 'package:musium/features/auth/domain/use_cases/is_email_exists_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/login_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/send_email_verification_use_case.dart';
+import 'package:musium/features/auth/domain/use_cases/send_password_reset_email_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/signup_use_case.dart';
 import 'package:musium/features/auth/presentation/cubits/email_verification_cubit/email_verification_cubit.dart';
+import 'package:musium/features/auth/presentation/cubits/forgot_password_cubit/forgot_password_cubit.dart';
 import 'package:musium/features/auth/presentation/cubits/login_cubit/login_cubit.dart';
 import 'package:musium/features/auth/presentation/cubits/signup_cubit/signup_cubit.dart';
 import 'package:musium/features/auth/presentation/cubits/timer_cubit/timer_cubit.dart';
+import 'package:musium/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:musium/features/auth/presentation/pages/verify_email_page.dart';
 import 'package:musium/features/auth/presentation/pages/login_page.dart';
 import 'package:musium/features/auth/presentation/pages/signup_page.dart';
 import 'package:musium/features/home/presentation/pages/home_page.dart';
-import 'package:musium/features/settings/domain/use_cases/sign_out_use_case.dart';
+import 'package:musium/features/auth/domain/use_cases/sign_out_use_case.dart';
 import 'package:musium/features/settings/presentation/cubits/sign_out_cubit/sign_out_cubit.dart';
 import 'package:musium/features/settings/presentation/pages/settings_page.dart';
 import 'package:musium/features/welcome/presentation/pages/welcome_page.dart';
@@ -33,6 +37,9 @@ abstract class AppRouter {
 
   static const emailVerificationPageName = 'emailVerificationPage';
   static const emailVerificationPagePath = '/emailVerificationPage';
+
+  static const forgotPasswordPageName = 'forgotPasswordPage';
+  static const forgotPasswordPagePath = '/forgotPasswordPage';
 
   static const homePageName = 'homePage';
   static const homePagePath = '/homePage';
@@ -82,6 +89,17 @@ abstract class AppRouter {
             )
           ],
           child: VerifyEmailPage(),
+        ),
+      ),
+      GoRoute(
+        name: forgotPasswordPageName,
+        path: forgotPasswordPagePath,
+        builder: (context, state) => BlocProvider(
+          create: (context) => ForgotPasswordCubit(
+              sendPasswordResetEmailUseCase:
+                  locator.get<SendPasswordResetEmailUseCase>(),
+              isEmailExistsUseCase: locator.get<IsEmailExistsUseCase>()),
+          child: ForgotPasswordPage(),
         ),
       ),
       GoRoute(

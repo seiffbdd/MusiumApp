@@ -11,7 +11,7 @@ class SendEmailVerificationUseCase
   const SendEmailVerificationUseCase(this._authRepo);
 
   @override
-  Future<Either<Failure, void>> call(NoParams params) {
-    return _authRepo.sendEmailVerification();
+  Future<Either<Failure, void>> call(NoParams params) async {
+    return await _authRepo.sendEmailVerification();
   }
 }

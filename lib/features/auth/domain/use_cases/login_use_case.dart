@@ -9,8 +9,8 @@ class LoginUseCase implements UseCase<Either<Failure, void>, LoginParams> {
   const LoginUseCase(this._authRepo);
 
   @override
-  Future<Either<Failure, void>> call(LoginParams params) {
-    return _authRepo.login(
+  Future<Either<Failure, void>> call(LoginParams params) async {
+    return await _authRepo.login(
       email: params.email,
       password: params.password,
     );

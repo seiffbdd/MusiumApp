@@ -14,9 +14,14 @@ abstract class AuthRepo {
   });
 
   Future<Either<Failure, void>> signOut();
+
   Future<Either<Failure, void>> sendEmailVerification();
+
+  Future<Either<Failure, void>> sendPasswordResetEmail({required String email});
 
   Stream<Either<Failure, User>> get authStatus;
 
   Future<Either<Failure, UserEntity>> getUserData({required String uid});
+
+  Future<Either<Failure, bool>> isEmailExists({required String email});
 }

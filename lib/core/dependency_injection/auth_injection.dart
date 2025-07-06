@@ -10,10 +10,12 @@ import 'package:musium/features/auth/domain/repos/auth_repo.dart';
 import 'package:musium/features/auth/domain/repos/ticker_repo.dart';
 import 'package:musium/features/auth/domain/use_cases/count_down_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/get_user_data_use_case.dart';
+import 'package:musium/features/auth/domain/use_cases/is_email_exists_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/listen_to_auth_state_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/login_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/send_email_verification_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/send_password_reset_email_use_case.dart';
+import 'package:musium/features/auth/domain/use_cases/sign_out_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/signup_use_case.dart';
 
 Future<void> initAuthFeature() async {
@@ -73,5 +75,13 @@ Future<void> initAuthFeature() async {
 
   locator.registerLazySingleton<SendPasswordResetEmailUseCase>(
     () => SendPasswordResetEmailUseCase(locator.get<AuthRepo>()),
+  );
+
+  locator.registerLazySingleton<SignOutUseCase>(
+    () => SignOutUseCase(locator.get<AuthRepo>()),
+  );
+
+  locator.registerLazySingleton<IsEmailExistsUseCase>(
+    () => IsEmailExistsUseCase(locator.get<AuthRepo>()),
   );
 }
