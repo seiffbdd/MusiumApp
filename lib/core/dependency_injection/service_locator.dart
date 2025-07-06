@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:musium/core/storage/cache_helper.dart';
+import 'package:musium/core/storage/cache_helper_impl.dart';
 import 'package:musium/features/auth/data/data_sources/firebase_auth_service.dart';
 import 'package:musium/features/auth/data/data_sources/ticker_data_source.dart';
 import 'package:musium/features/auth/data/data_sources/user_remote_data_source.dart';
@@ -14,6 +15,7 @@ import 'package:musium/features/auth/domain/use_cases/get_user_data_use_case.dar
 import 'package:musium/features/auth/domain/use_cases/listen_to_auth_state_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/login_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/send_email_verification_use_case.dart';
+import 'package:musium/features/auth/domain/use_cases/send_password_reset_email_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/signup_use_case.dart';
 import 'package:musium/features/settings/domain/use_cases/sign_out_use_case.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,7 +28,7 @@ Future<void> setup() async {
     await SharedPreferences.getInstance(),
   );
 
-  locator.registerSingleton<CacheHelper>(CacheHelper());
+  locator.registerSingleton<CacheHelper>(CacheHelperImpl());
 
   // Data Sources
 
@@ -88,5 +90,9 @@ Future<void> setup() async {
 
   locator.registerLazySingleton<CountDownUseCase>(
     () => CountDownUseCase(locator.get<TickerRepo>()),
+  );
+
+  locator.registerLazySingleton<SendPasswordResetEmailUseCase>(
+    () => SendPasswordResetEmailUseCase(locator.get<AuthRepo>()),
   );
 }

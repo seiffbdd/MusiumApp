@@ -1,21 +1,7 @@
-import 'package:musium/core/utils/service_locator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+abstract class CacheHelper {
+  Future<void> setOnboardingCompleted({required bool isCompleted});
 
-class CacheHelper {
-  static const onboardingCompletedKey = 'onboardingCompleted';
+  bool isOnboardingCompleted();
 
-  Future<void> setOnboardingCompleted({required bool isCompleted}) async {
-    await locator
-        .get<SharedPreferences>()
-        .setBool(onboardingCompletedKey, isCompleted);
-  }
-
-  bool isOnboardingCompleted() {
-    return locator.get<SharedPreferences>().getBool(onboardingCompletedKey) ??
-        false;
-  }
-
-  Future<void> clearCache() async {
-    await locator.get<SharedPreferences>().clear();
-  }
+  Future<void> clearCache();
 }

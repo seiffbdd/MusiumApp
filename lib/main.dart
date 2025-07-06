@@ -6,7 +6,7 @@ import 'package:musium/config/app_bloc_observer.dart';
 import 'package:musium/config/routes/app_router.dart';
 import 'package:musium/config/theme/app_theme.dart';
 import 'package:musium/core/presentation/cubits/auth_cubit/auth_cubit.dart';
-import 'package:musium/core/utils/service_locator.dart';
+import 'package:musium/core/dependency_injection/service_locator.dart';
 import 'package:musium/features/auth/domain/use_cases/get_user_data_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/listen_to_auth_state_use_case.dart';
 import 'package:musium/firebase_options.dart';
