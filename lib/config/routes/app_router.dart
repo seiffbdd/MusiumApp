@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:musium/core/storage/cache_helper.dart';
-import 'package:musium/core/utils/service_locator.dart';
+import 'package:musium/core/dependency_injection/service_locator.dart';
 import 'package:musium/features/auth/domain/use_cases/count_down_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/login_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/send_email_verification_use_case.dart';
