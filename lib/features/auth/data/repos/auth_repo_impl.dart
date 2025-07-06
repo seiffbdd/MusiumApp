@@ -11,7 +11,7 @@ class AuthRepoImpl implements AuthRepo {
   final FirebaseAuthService _firebaseAuthService;
   final UserRemoteDataSource _userRemoteDataSource;
 
-  AuthRepoImpl({
+  const AuthRepoImpl({
     required FirebaseAuthService firebaseAuthService,
     required UserRemoteDataSource userRemoteDataSource,
   })  : _firebaseAuthService = firebaseAuthService,
@@ -59,9 +59,26 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Stream<Either<Failure, User>> get authStatus async* {
-    yield* _firebaseAuthService.authStatus;
+  Future<Either<Failure, void>> sendEmailVerification() async {
+    final response = await _firebaseAuthService.sendEmailVerification();
+    return response.fold(
+      (failure) => left(failure),
+      (_) => right(null), // Email verification sent successfully
+    );
   }
+
+  @override
+  Future<Either<Failure, void>> signOut() async {
+    final result = await _firebaseAuthService.signOut();
+    return result.fold(
+      (failure) => left(failure),
+      (_) => right(null), // Sign out successful, no data to return
+    );
+  }
+
+  @override
+  Stream<Either<Failure, User>> get authStatus =>
+      _firebaseAuthService.authStatus;
 
   @override
   Future<Either<Failure, UserEntity>> getUserData({required String uid}) async {

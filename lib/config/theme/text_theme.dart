@@ -1,41 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:musium/config/theme/app_colors.dart';
 
 /// Defines the text styles used across the app for **mobile** screens.
 /// Font sizes are optimized for smaller screen dimensions.
 TextTheme get mobileTextTheme => TextTheme(
       displaySmall: TextStyle(
-        fontSize: 32,
+        fontSize: 32.sp,
         fontWeight: FontWeight.bold,
         color: AppColors.textWhite,
       ),
       headlineLarge: TextStyle(
-        fontSize: 27,
+        fontSize: 27.sp,
         fontWeight: FontWeight.bold,
         color: AppColors.cyan,
       ),
       headlineMedium: TextStyle(
-        fontSize: 24,
+        fontSize: 24.sp,
         fontWeight: FontWeight.bold,
         color: AppColors.textWhite,
       ),
       headlineSmall: TextStyle(
-        fontSize: 20,
+        fontSize: 20.sp,
         fontWeight: FontWeight.bold,
         color: AppColors.textWhite,
       ),
       titleLarge: TextStyle(
-        fontSize: 16,
+        fontSize: 16.sp,
         fontWeight: FontWeight.normal,
         color: AppColors.textWhite,
       ),
       titleMedium: TextStyle(
-        fontSize: 15,
+        fontSize: 15.sp,
         fontWeight: FontWeight.bold,
         color: AppColors.textMutedGrey,
       ),
       titleSmall: TextStyle(
-        fontSize: 12,
+        fontSize: 12.sp,
         fontWeight: FontWeight.bold,
         color: AppColors.textMutedGrey,
       ),

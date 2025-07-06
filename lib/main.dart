@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:musium/config/app_bloc_observer.dart';
 import 'package:musium/config/routes/app_router.dart';
 import 'package:musium/config/theme/app_theme.dart';
@@ -15,6 +16,7 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await setup();
   Bloc.observer = AppBlocObserver();
+  await ScreenUtil.ensureScreenSize();
   runApp(const Musium());
 }
 
@@ -29,17 +31,28 @@ class Musium extends StatelessWidget {
         locator.get<GetUserDataUseCase>(),
       )..listenToUserChanges(),
       child: BlocListener<AuthCubit, AuthState>(
+        listenWhen: (previous, current) =>
+            previous.runtimeType != UserDataFailed,
         listener: (context, state) {
-          if (state is Authenticated) {
+          if (state is AuthenticatedAndVerified) {
             AppRouter.router.goNamed(AppRouter.homePageName);
           } else if (state is Unauthenticated || state is UserDataFailed) {
             AppRouter.router.goNamed(AppRouter.loginPageName);
+          } else if (state is AuthenticatedButUnverified) {
+            AppRouter.router.goNamed(AppRouter.emailVerificationPageName);
           }
         },
-        child: MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          theme: buildAppTheme(context),
-          routerConfig: AppRouter.router,
+        child: ScreenUtilInit(
+          designSize: const Size(433, 922), // iPhone 12 Pro dimensions
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (context, child) {
+            return MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              theme: buildAppTheme(context),
+              routerConfig: AppRouter.router,
+            );
+          },
         ),
       ),
     );

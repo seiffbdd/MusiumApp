@@ -8,7 +8,7 @@ class SignupUseCase
     implements UseCase<Either<Failure, UserEntity>, SignupParams> {
   final AuthRepo _authRepo;
 
-  SignupUseCase(this._authRepo);
+  const SignupUseCase(this._authRepo);
 
   @override
   Future<Either<Failure, UserEntity>> call(SignupParams params) {

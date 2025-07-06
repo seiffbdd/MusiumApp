@@ -6,7 +6,6 @@ import 'package:musium/config/routes/app_router.dart';
 import 'package:musium/core/presentation/components.dart';
 import 'package:musium/core/presentation/widgets/default_rounded_button.dart';
 import 'package:musium/features/auth/presentation/cubits/login_cubit/login_cubit.dart';
-import 'package:musium/features/auth/presentation/widgets/build_checkbox.dart';
 import 'package:musium/features/auth/presentation/widgets/custom_circle_indicator.dart';
 import 'package:musium/features/auth/presentation/widgets/custom_text_form_field.dart';
 import 'package:musium/features/auth/presentation/widgets/divider_with_text.dart';
@@ -50,9 +49,6 @@ class _LoginPageState extends State<LoginPage> {
             text: state.errMessage,
           );
         }
-        if (state is LoginSuccess) {
-          context.goNamed(AppRouter.homePageName);
-        }
       },
       child: Scaffold(
         body: Stack(
@@ -95,9 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                         isPassword: true,
                         prefixIcon: Icons.lock_outline,
                       ),
-                      const SizedBox(height: 8.0),
-                      const BuildCheckbox(),
-                      const SizedBox(height: 12.0),
+                      const SizedBox(height: 32.0),
                       DefaultRoundedButton(
                         text: 'Log in',
                         onPressed: () async {

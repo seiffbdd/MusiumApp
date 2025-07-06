@@ -13,6 +13,10 @@ abstract class FirebaseAuthService {
     required String password,
   });
 
+  Future<Either<Failure, void>> sendEmailVerification();
+
+  Future<Either<Failure, void>> signOut();
+
   Stream<Either<Failure, User>> get authStatus;
 }
 
@@ -55,23 +59,55 @@ class FirebaseAuthServiceImpl extends FirebaseAuthService {
   }
 
   @override
-  Stream<Either<Failure, User>> get authStatus async* {
+  Future<Either<Failure, void>> sendEmailVerification() async {
     try {
-      await _firebaseAuth.currentUser?.reload();
-      yield* _firebaseAuth.userChanges().map((user) {
-        if (user != null) {
-          return right(user);
-        } else {
-          return left(Failure(message: 'No user signed in.'));
-        }
-      });
+      await _firebaseAuth.currentUser!.sendEmailVerification();
+      return right(null);
     } on FirebaseAuthException catch (e) {
-      yield left(Failure(
+      return left(
+        Failure(message: '${e.message}', code: e.code),
+      );
+    } catch (e) {
+      return left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> signOut() async {
+    try {
+      await _firebaseAuth.signOut();
+      return right(null);
+    } on FirebaseAuthException catch (e) {
+      return left(Failure(
           message: 'FirebaseAuthException: ${e.message}', code: e.code));
     } catch (e) {
-      yield left(
-          Failure(message: 'Error getting auth status: ${e.toString()}'));
+      return left(Failure(message: 'Error signing out: ${e.toString()}'));
     }
+  }
+
+  @override
+  Stream<Either<Failure, User>> get authStatus {
+    // Return a stream that emits Either<Failure, User>
+    return _firebaseAuth.authStateChanges().asyncMap((user) async {
+      try {
+        if (user != null) {
+          // Optionally reload to ensure latest user info
+          await user.reload();
+          final refreshedUser = _firebaseAuth.currentUser;
+          if (refreshedUser != null) {
+            return right(refreshedUser);
+          }
+        }
+        return left(Failure(message: 'No user is currently signed in.'));
+      } on FirebaseAuthException catch (e) {
+        return left(Failure(
+          message: 'Firebase Auth Error: ${e.message ?? 'Unknown error'}',
+          code: e.code,
+        ));
+      } catch (e) {
+        return left(Failure(message: 'Unexpected error: $e'));
+      }
+    });
   }
 
   String _mapFirebaseAuthError(String code) {

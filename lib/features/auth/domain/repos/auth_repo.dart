@@ -13,6 +13,9 @@ abstract class AuthRepo {
     required String password,
   });
 
+  Future<Either<Failure, void>> signOut();
+  Future<Either<Failure, void>> sendEmailVerification();
+
   Stream<Either<Failure, User>> get authStatus;
 
   Future<Either<Failure, UserEntity>> getUserData({required String uid});

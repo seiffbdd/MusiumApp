@@ -54,9 +54,6 @@ class _LoginPageState extends State<SignupPage> {
             text: state.errMessage,
           );
         }
-        if (state is SignupSuccess) {
-          context.goNamed(AppRouter.homePageName);
-        }
       },
       child: Scaffold(
         body: Stack(

@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:musium/core/errors/failure.dart';
 import 'package:musium/features/auth/domain/entities/user_entity.dart';
 import 'package:musium/features/auth/domain/use_cases/get_user_data_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/listen_to_auth_state_use_case.dart';
@@ -16,22 +19,32 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit(this._listenToAuthStateUseCase, this._getUserDataUseCase)
       : super(AuthInitial());
 
+  late final StreamSubscription<Either<Failure, User>> _authSubscription;
+
   void listenToUserChanges() {
     try {
-      _listenToAuthStateUseCase(NoParams()).listen(
+      _authSubscription = _listenToAuthStateUseCase(NoParams.instance).listen(
         (auth) {
           auth.fold(
             (failure) {
+              _userEntity = null; // Reset user entity on failure
               emit(Unauthenticated(message: failure.message));
             },
             (user) async {
               await getUserData(uid: user.uid);
+              if (user.emailVerified) {
+                emit(AuthenticatedAndVerified());
+              } else {
+                emit(AuthenticatedButUnverified());
+              }
             },
           );
         },
       );
     } catch (e) {
+      _authSubscription.cancel();
       emit(UserDataFailed(errMessage: 'Error listening to auth state: $e'));
+      return;
     }
   }
 
@@ -48,7 +61,7 @@ class AuthCubit extends Cubit<AuthState> {
             name: userEntity.name,
             email: userEntity.email,
           );
-          emit(Authenticated());
+          emit(AuthenticatedAndVerified());
         },
       );
     } catch (e) {
@@ -67,4 +80,10 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   UserEntity? get userEntity => _userEntity;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 }

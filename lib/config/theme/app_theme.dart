@@ -15,6 +15,9 @@ ThemeData buildAppTheme(BuildContext context) {
     scaffoldBackgroundColor: AppColors.backgroundDark,
     textTheme: textTheme,
     fontFamily: 'GothicA1',
+    appBarTheme: AppBarTheme(
+      titleTextStyle: Theme.of(context).textTheme.headlineLarge,
+    ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         textStyle: TextStyle(

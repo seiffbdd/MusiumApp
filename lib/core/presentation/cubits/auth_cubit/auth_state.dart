@@ -9,12 +9,17 @@ sealed class AuthState extends Equatable {
 
 final class AuthInitial extends AuthState {}
 
-final class Authenticated extends AuthState {}
+final class AuthenticatedAndVerified extends AuthState {}
+
+final class AuthenticatedButUnverified extends AuthState {}
 
 final class Unauthenticated extends AuthState {
   final String message;
 
   const Unauthenticated({required this.message});
+
+  @override
+  List<Object> get props => [message];
 }
 
 final class UserDataFailed extends AuthState {

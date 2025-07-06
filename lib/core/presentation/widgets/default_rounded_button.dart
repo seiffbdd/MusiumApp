@@ -9,15 +9,31 @@ class DefaultRoundedButton extends StatelessWidget {
     required this.text,
     this.textStyle,
     this.onPressed,
+    this.icon,
+    this.backgroundColor,
   });
   final String text;
   final TextStyle? textStyle;
   final void Function()? onPressed;
+  final Icon? icon;
+  final Color? backgroundColor;
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed ?? () {},
+    return ElevatedButton.icon(
+      label: Text(
+        text,
+        style: textStyle ??
+            GoogleFonts.mulish(
+              textStyle: Theme.of(context).textTheme.titleLarge,
+            ),
+      ),
+      iconAlignment: IconAlignment.start,
+      icon: icon,
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
+        iconSize: Components.h(
+            componentHeight: 32.0,
+            currentScreenHeight: MediaQuery.sizeOf(context).height),
         padding: EdgeInsets.all(
           Components.h(
               componentHeight: 16.0,
@@ -26,14 +42,10 @@ class DefaultRoundedButton extends StatelessWidget {
         minimumSize: Size.fromHeight(Components.h(
             componentHeight: 59,
             currentScreenHeight: MediaQuery.sizeOf(context).height)),
-        backgroundColor: AppColors.buttonBackgroundColor,
+        backgroundColor: backgroundColor ?? AppColors.buttonBackgroundColor,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       ),
-      child: Text(text,
-          style: textStyle ??
-              GoogleFonts.mulish(
-                  textStyle: Theme.of(context).textTheme.titleLarge)),
     );
   }
 }

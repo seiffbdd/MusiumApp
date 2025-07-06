@@ -31,6 +31,8 @@ class SignupCubit extends Cubit<SignupState> {
           emit(SignupFailed(errMessage: failure.message));
         },
         (userEntity) {
+          if (isClosed) return; // Check if the cubit is still active
+
           emit(SignupSuccess());
         },
       );

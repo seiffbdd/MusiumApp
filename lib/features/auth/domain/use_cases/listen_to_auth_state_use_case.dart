@@ -9,10 +9,8 @@ class ListenToAuthStateUseCase
     implements StreamUseCase<Either<Failure, User>, NoParams> {
   final AuthRepo _authRepo;
 
-  ListenToAuthStateUseCase(this._authRepo);
+  const ListenToAuthStateUseCase(this._authRepo);
 
   @override
-  Stream<Either<Failure, User>> call(NoParams params) async* {
-    yield* _authRepo.authStatus;
-  }
+  Stream<Either<Failure, User>> call(NoParams params) => _authRepo.authStatus;
 }

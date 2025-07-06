@@ -2,10 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:musium/core/storage/cache_helper.dart';
 import 'package:musium/core/utils/service_locator.dart';
+import 'package:musium/features/auth/domain/use_cases/count_down_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/login_use_case.dart';
+import 'package:musium/features/auth/domain/use_cases/send_email_verification_use_case.dart';
 import 'package:musium/features/auth/domain/use_cases/signup_use_case.dart';
+import 'package:musium/features/auth/presentation/cubits/email_verification_cubit/email_verification_cubit.dart';
 import 'package:musium/features/auth/presentation/cubits/login_cubit/login_cubit.dart';
 import 'package:musium/features/auth/presentation/cubits/signup_cubit/signup_cubit.dart';
+import 'package:musium/features/auth/presentation/cubits/timer_cubit/timer_cubit.dart';
+import 'package:musium/features/auth/presentation/pages/verify_email_page.dart';
 import 'package:musium/features/auth/presentation/pages/login_page.dart';
 import 'package:musium/features/auth/presentation/pages/signup_page.dart';
 import 'package:musium/features/home/presentation/pages/home_page.dart';
@@ -25,6 +30,9 @@ abstract class AppRouter {
 
   static const signupPageName = 'signupPage';
   static const signupPagePath = '/signupPage';
+
+  static const emailVerificationPageName = 'emailVerificationPage';
+  static const emailVerificationPagePath = '/emailVerificationPage';
 
   static const homePageName = 'homePage';
   static const homePagePath = '/homePage';
@@ -58,6 +66,25 @@ abstract class AppRouter {
         ),
       ),
       GoRoute(
+        name: emailVerificationPageName,
+        path: emailVerificationPagePath,
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => EmailVerificationCubit(
+                locator.get<SendEmailVerificationUseCase>(),
+              ),
+            ),
+            BlocProvider(
+              create: (context) => TimerCubit(
+                countDownUseCase: locator.get<CountDownUseCase>(),
+              ),
+            )
+          ],
+          child: VerifyEmailPage(),
+        ),
+      ),
+      GoRoute(
         name: homePageName,
         path: homePagePath,
         builder: (context, state) => HomePage(),
@@ -74,13 +101,18 @@ abstract class AppRouter {
   );
 
   static String _getInitialLocationPath() {
-    if (!locator.get<CacheHelper>().isOnboardingCompleted()) {
-      return welcomePagePath;
-    } else {
-      if (locator.get<FirebaseAuth>().currentUser == null) {
-        return loginPagePath;
+    final user = locator.get<FirebaseAuth>().currentUser;
+    if (user == null) {
+      if (!locator.get<CacheHelper>().isOnboardingCompleted()) {
+        return welcomePagePath;
       } else {
+        return loginPagePath;
+      }
+    } else {
+      if (user.emailVerified) {
         return homePagePath;
+      } else {
+        return emailVerificationPagePath;
       }
     }
   }
