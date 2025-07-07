@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextButton.styleFrom(
                             textStyle: TextStyle(color: Color(0XFF39C0D4))),
                         child: Text(
-                          'Forgot the password?',
+                          'Forgot your password?',
                           style: Theme.of(context)
                               .textTheme
                               .titleSmall!
