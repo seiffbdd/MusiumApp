@@ -49,7 +49,8 @@ abstract class AppRouter {
 
   /// The main router configuration using `go_router`.
   static final router = GoRouter(
-    initialLocation: _getInitialLocationPath(),
+    // initialLocation: _getInitialLocationPath(),
+    initialLocation: homePagePath,
     routes: <RouteBase>[
       GoRoute(
         name: welcomePageName,

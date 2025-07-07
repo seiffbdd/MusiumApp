@@ -34,13 +34,13 @@ class Musium extends StatelessWidget {
         listenWhen: (previous, current) =>
             previous.runtimeType != UserDataFailed,
         listener: (context, state) {
-          if (state is AuthenticatedAndVerified) {
-            AppRouter.router.goNamed(AppRouter.homePageName);
-          } else if (state is Unauthenticated || state is UserDataFailed) {
-            AppRouter.router.goNamed(AppRouter.loginPageName);
-          } else if (state is AuthenticatedButUnverified) {
-            AppRouter.router.goNamed(AppRouter.emailVerificationPageName);
-          }
+          // if (state is AuthenticatedAndVerified) {
+          //   AppRouter.router.goNamed(AppRouter.homePageName);
+          // } else if (state is Unauthenticated || state is UserDataFailed) {
+          //   AppRouter.router.goNamed(AppRouter.loginPageName);
+          // } else if (state is AuthenticatedButUnverified) {
+          //   AppRouter.router.goNamed(AppRouter.emailVerificationPageName);
+          // }
         },
         child: ScreenUtilInit(
           designSize: const Size(433, 922),
