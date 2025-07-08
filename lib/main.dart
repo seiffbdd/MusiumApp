@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,17 +32,30 @@ class Musium extends StatelessWidget {
         locator.get<ListenToAuthStateUseCase>(),
         locator.get<GetUserDataUseCase>(),
       )..listenToUserChanges(),
-      child: ScreenUtilInit(
-        designSize: const Size(433, 922),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        builder: (context, child) {
-          return MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            theme: buildAppTheme(context),
-            routerConfig: AppRouter.router,
-          );
+      child: BlocListener<AuthCubit, AuthState>(
+        listenWhen: (previous, current) =>
+            previous.runtimeType != UserDataFailed,
+        listener: (context, state) {
+          if (state is AuthenticatedAndVerified) {
+            AppRouter.router.goNamed(AppRouter.homePageName);
+          } else if (state is Unauthenticated || state is UserDataFailed) {
+            AppRouter.router.goNamed(AppRouter.loginPageName);
+          } else if (state is AuthenticatedButUnverified) {
+            AppRouter.router.goNamed(AppRouter.emailVerificationPageName);
+          }
         },
+        child: ScreenUtilInit(
+          designSize: const Size(433, 922),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (context, child) {
+            return MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              theme: buildAppTheme(context),
+              routerConfig: AppRouter.router,
+            );
+          },
+        ),
       ),
     );
   }
