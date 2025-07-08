@@ -6,6 +6,7 @@ import 'package:musium/config/theme/app_colors.dart';
 import 'package:musium/core/presentation/cubits/auth_cubit/auth_cubit.dart';
 import 'package:musium/features/home/presentation/home_constants/tabs.dart';
 import 'package:musium/features/home/presentation/widgets/custom_tab.dart';
+import 'package:musium/features/home/presentation/widgets/playlists_tab_view.dart';
 import 'package:musium/features/home/presentation/widgets/songs_tab_view.dart';
 
 class HomePage extends StatefulWidget {
@@ -49,7 +50,7 @@ class _HomePageState extends State<HomePage>
         child: TabBarView(controller: _tabCont, children: [
           const SongsTabView(),
           Text('Folders'),
-          Text('Playlists'),
+          const PlaylistsTabView(),
           Text('Albums'),
           Text('Podcasts'),
         ]),

@@ -16,7 +16,7 @@ class SongsTabView extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         Text(
-          'Recently played',
+          'Recently Played',
           style: Theme.of(context)
               .textTheme
               .titleLarge!
