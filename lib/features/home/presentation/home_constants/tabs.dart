@@ -1,5 +1,5 @@
 const List<String> tabs = [
-  'All',
+  'Songs',
   'Folders',
   'Playlists',
   'Albums',

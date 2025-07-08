@@ -6,6 +6,7 @@ import 'package:musium/config/theme/app_colors.dart';
 import 'package:musium/core/presentation/cubits/auth_cubit/auth_cubit.dart';
 import 'package:musium/features/home/presentation/home_constants/tabs.dart';
 import 'package:musium/features/home/presentation/widgets/custom_tab.dart';
+import 'package:musium/features/home/presentation/widgets/songs_tab_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -44,9 +45,9 @@ class _HomePageState extends State<HomePage>
     return Scaffold(
       appBar: _buildAppBar(context),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 26.0),
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 24.0),
         child: TabBarView(controller: _tabCont, children: [
-          Text('All'),
+          const SongsTabView(),
           Text('Folders'),
           Text('Playlists'),
           Text('Albums'),
@@ -101,7 +102,7 @@ class _HomePageState extends State<HomePage>
 
   TabBar _buildTabBar() {
     return TabBar(
-      labelPadding: EdgeInsets.only(right: 9, bottom: 16.0),
+      labelPadding: const EdgeInsets.only(right: 9),
       controller: _tabCont,
       dividerHeight: 0,
       indicator: const BoxDecoration(),
