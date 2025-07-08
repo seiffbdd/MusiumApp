@@ -52,8 +52,8 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       final result = await _getUserDataUseCase(uid);
       result.fold(
-        (failuer) => emit(
-          UserDataFailed(errMessage: failuer.message),
+        (failure) => emit(
+          UserDataFailed(errMessage: failure.message),
         ),
         (userEntity) {
           setUserEntity(
