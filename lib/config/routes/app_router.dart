@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:musium/core/storage/cache_helper.dart';
 import 'package:musium/core/dependency_injection/service_locator.dart';
@@ -21,6 +20,7 @@ import 'package:musium/features/home/presentation/pages/home_page.dart';
 import 'package:musium/features/auth/domain/use_cases/sign_out_use_case.dart';
 import 'package:musium/features/settings/presentation/cubits/sign_out_cubit/sign_out_cubit.dart';
 import 'package:musium/features/settings/presentation/pages/settings_page.dart';
+import 'package:musium/features/splash/presentation/pages/splash_page.dart';
 import 'package:musium/features/welcome/presentation/pages/welcome_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,6 +28,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 abstract class AppRouter {
   static const welcomePageName = 'welcomePage';
   static const welcomePagePath = '/';
+
+  static const splashPageName = 'splashPage';
+  static const splashPagePath = '/splashPage';
 
   static const loginPageName = 'loginPage';
   static const loginPagePath = '/loginPage';
@@ -49,13 +52,17 @@ abstract class AppRouter {
 
   /// The main router configuration using `go_router`.
   static final router = GoRouter(
-    // initialLocation: _getInitialLocationPath(),
-    initialLocation: homePagePath,
+    initialLocation: _getInitialLocationPath(),
     routes: <RouteBase>[
       GoRoute(
         name: welcomePageName,
         path: welcomePagePath,
         builder: (context, state) => WelcomePage(),
+      ),
+      GoRoute(
+        name: splashPageName,
+        path: splashPagePath,
+        builder: (context, state) => SplashPage(),
       ),
       GoRoute(
         name: loginPageName,
@@ -120,19 +127,10 @@ abstract class AppRouter {
   );
 
   static String _getInitialLocationPath() {
-    final user = locator.get<FirebaseAuth>().currentUser;
-    if (user == null) {
-      if (!locator.get<CacheHelper>().isOnboardingCompleted()) {
-        return welcomePagePath;
-      } else {
-        return loginPagePath;
-      }
+    if (!locator.get<CacheHelper>().isOnboardingCompleted()) {
+      return welcomePagePath;
     } else {
-      if (user.emailVerified) {
-        return homePagePath;
-      } else {
-        return emailVerificationPagePath;
-      }
+      return splashPagePath;
     }
   }
 }
