@@ -408,15 +408,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  on_audio_query:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: main
-      resolved-ref: "0633a5e12bfae846cff2374b01f73f5e011cacbb"
-      url: "https://github.com/seiffbdd/on_audio_query.git"
-    source: git
-    version: "0.0.0"
   path:
     dependency: transitive
     description:
